@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/pengyizhuang/Code/Clion_Code/2048/main.c
+stdio.h
+-
+stdlib.h
+-
+time.h
+-
+math.h
+-
+

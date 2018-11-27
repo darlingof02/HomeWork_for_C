@@ -2,19 +2,20 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <conio.h>
 #define N 5
 int Table[N][N];
-int K = 1;
 int Max;
 
 
 void ShowTable()
 {
     printf("=========2 0 4 8========\n");
-    for (int i = 1; i <= 4; ++i) {
+    int i, j;
+    for (i = 1; i <= 4; ++i) {
         printf("|___________________|\n");
         printf("|");
-        for (int j = 1; j <= 4; ++j) {
+        for (j = 1; j <= 4; ++j) {
             printf("%-4d", Table[i][j]);
             if (j!=4) printf("|");
         }
@@ -25,8 +26,9 @@ void ShowTable()
 
 void init()
 {
-    for (int i = 1; i <= 4; ++i) {
-        for (int j = 1; j <= 4; ++j) {
+    int i, j;
+    for (i = 1; i <= 4; ++i) {
+        for (j = 1; j <= 4; ++j) {
             Table[i][j] = 0;
         }
     }
@@ -36,12 +38,14 @@ void init()
     int p=rand()%4+1;
     int q=rand()%4+1;
     Table[m][n] = Table[p][q] = 2;
+    Max = 0;
 }
 
 int IfValid(int x)
 {
+    int i;
     int flag = 0;
-    for (int i = 1; i <= 11; ++i) {
+    for (i = 1; i <= 11; ++i) {
         if (x == pow(2, i))
         {
             flag = 1;
@@ -53,9 +57,10 @@ int IfValid(int x)
 
 int testUp()
 {
+    int i, j;
     int flag = 0;
-    for (int i = 4; i >=2 ; i--) {
-        for (int j = 1; j <= 4; ++j) {
+    for (j = 1; j <= 4; ++j) {
+        for (i = 4; i >= 2; --i) {
             if (IfValid(Table[i][j] + Table[i-1][j]))
             {
                 flag = 1;
@@ -68,10 +73,11 @@ int testUp()
 
 int testDown()
 {
+    int i, j;
     int flag = 0;
-    for (int i = 1; i <= 3; ++i) {
-        for (int j = 1; j <= 4; ++j) {
-            if (IfValid(Table[i][j] + Table[i+1][j]))
+    for (j = 1; j <= 4; ++j) {
+        for (i = 1; i <= 3; ++i) {
+            if (IfValid(Table[i+1][j+1] + Table[i][j]))
             {
                 flag = 1;
                 break;
@@ -83,10 +89,12 @@ int testDown()
 
 int testLeft()
 {
+    int i, j;
     int flag = 0;
-    for (int j = 4; j >= 2; --j) {
-        for (int i = 1; i <= 4; ++i) {
-            if (IfValid(Table[i][j - 1] + Table[i][j])) {
+    for (i = 1; i <= 4; ++i) {
+        for (j = 4; j >= 2; --j) {
+            if (IfValid(Table[i][j-1] + Table[i][j]))
+            {
                 flag = 1;
                 break;
             }
@@ -97,10 +105,11 @@ int testLeft()
 
 int testRight()
 {
+    int i, j;
     int flag = 0;
-    for (int j = 1; j <= 3; ++j) {
-        for (int i = 1; i <= 4; ++i) {
-            if (IfValid(Table[i][j] + Table[i][j+1]))
+    for (i = 1; i <= 4; ++i) {
+        for (j = 1; j <= 3; ++j) {
+            if (IfValid(Table[i][j+1] + Table[i][j]))
             {
                 flag = 1;
                 break;
@@ -112,12 +121,13 @@ int testRight()
 
 void addNew()
 {
+    int i, j;
     srand((unsigned)time(NULL));
     int cnt= 0, tag = rand()%16, p, q;
     while (tag != cnt)
     {
-        for (int i = 1; i <= 4; ++i) {
-            for (int j = 1; j <= 4; ++j) {
+        for (i = 1; i <= 4; ++i) {
+            for (j = 1; j <= 4; ++j) {
                 if (Table[i][j] == 0)
                 {
                     cnt ++;
@@ -140,11 +150,12 @@ void addNew()
 
 void upMove()
 {
+    int i, j, k;
     if (testUp())
     {
-        for (int j = 1; j <= 4; ++j) {
-            for (int i = 2; i <=4 ; ++i) {
-                for (int k = i; k >= 2; --k) {
+        for (j = 1; j <= 4; ++j) {
+            for (i = 2; i <=4 ; ++i) {
+                for (k = i; k >= 2; --k) {
                     if (Table[k-1][j] == 0)
                     {
                         Table[k-1][j] = Table[k][j];
@@ -153,13 +164,13 @@ void upMove()
                 }
             }
         }
-        for (int j = 1; j <= 4; ++j) {
-            for (int i = 2; i <= 4; ++i) {
+        for (j = 1; j <= 4; ++j) {
+            for (i = 2; i <= 4; ++i) {
                 if (IfValid(Table[i-1][j] + Table[i][j]))
                 {
                     Table[i-1][j] += Table[i][j];
                     Table[i][j] = 0;
-                    Max = Max>Table[i-1][j]?Max:Table[i][j-1];
+                    Max = Max>Table[i-1][j]?Max:Table[i-1][j];
                 }
             }
         }
@@ -171,11 +182,12 @@ void upMove()
 
 void downMove()
 {
+    int i, j, k;
     if (testDown())
     {
-        for (int j = 1; j <= 4; ++j) {
-            for (int i = 3; i >= 1; --i) {
-                for (int k = i; k <= 3; ++k) {
+        for (j = 1; j <= 4; ++j) {
+            for (i = 3; i >= 1; --i) {
+                for (k = i; k <= 3; ++k) {
                     if (Table[k+1][j] == 0)
                     {
                         Table[k+1][j] = Table[k][j];
@@ -184,8 +196,8 @@ void downMove()
                 }
             }
         }
-        for (int j = 1; j <= 4; ++j) {
-            for (int i = 3; i >=1 ; --i) {
+        for (j = 1; j <= 4; ++j) {
+            for (i = 3; i >=1 ; --i) {
                 if (IfValid(Table[i][j] + Table[i+1][j]))
                 {
                     Table[i+1][j] += Table[i][j];
@@ -201,11 +213,12 @@ void downMove()
 
 void leftMove()
 {
+    int i, j, k;
     if (testLeft())
     {
-        for (int i = 1; i <= 4; ++i) {
-            for (int j = 2; j <= 4; ++j) {
-                for (int k = j; k >= 2; --k) {
+        for (i = 1; i <= 4; ++i) {
+            for (j = 2; j <= 4; ++j) {
+                for (k = j; k >= 2; --k) {
                     if (Table[i][k-1] == 0)
                     {
                         Table[i][k-1] = Table[i][k];
@@ -214,8 +227,8 @@ void leftMove()
                 }
             }
         }
-        for (int i = 1; i <= 4; ++i) {
-            for (int j = 2; j <= 4; ++j) {
+        for (i = 1; i <= 4; ++i) {
+            for (j = 2; j <= 4; ++j) {
                 if (IfValid(Table[i][j-1] + Table[i][j]))
                 {
                     Table[i][j-1] += Table[i][j];
@@ -230,11 +243,12 @@ void leftMove()
 
 void rightMove()
 {
+    int i, j, k;
     if (testRight())
     {
-        for (int i = 1; i <= 4; ++i) {
-            for (int j = 3; j >= 1; --j) {
-                for (int k = j; k <= 3; ++k) {
+        for (i = 1; i <= 4; ++i) {
+            for (j = 3; j >= 1; --j) {
+                for (k = j; k <= 3; ++k) {
                     if (Table[i][k+1] == 0)
                     {
                         Table[i][k+1] = Table[i][k];
@@ -243,8 +257,8 @@ void rightMove()
                 }
             }
         }
-        for (int i = 1; i <= 4; ++i) {
-            for (int j = 3; j >= 1; ++j) {
+        for (i = 1; i <= 4; ++i) {
+            for (j = 3; j >= 1; --j) {
                 if (IfValid(Table[i][j+1] + Table[i][j]))
                 {
                     Table[i][j+1] += Table[i][j];
@@ -272,23 +286,26 @@ int IfWin()
     return Max == 2048;
 }
 
+char GetDir()
+{
+
+}
+
 int main() {
-    printf("Do you wanna play (≧∀≦)\n");
+    printf("Do you wanna play (≧?≦)\n");
     printf("Y/N\n");
     char c;
     Max = 0;
-    c = getchar();
-    getchar();
+    c = getch();
     if (c == 'Y')
     {
         char dir;
         init();
-        system("clear");
+        system("cls");
         ShowTable();
         while (IfLose() + IfWin() == 0)
         {
-            dir = getchar();
-            getchar();
+            dir = getch();
             if (dir == 'a' || dir == 'd' || dir == 'w' || dir == 's')
             {
                 switch(dir)
@@ -308,8 +325,9 @@ int main() {
                     default:
                         break;
                 }
-                system("clear");
+                system("cls");
                 ShowTable();
+                printf("MaxNum = %d\n", Max);
             }
             else if(dir == 'q')
             {
@@ -317,12 +335,17 @@ int main() {
             }
             else
             {
-                system("clear");
+                system("cls");
                 ShowTable();
-                printf("Uh, you push something wrong (ÒωÓױ)\n");
+                printf("Uh, you push something wrong (òωó?)\n");
+            }
+            if (IfWin()) printf("Congratulations! \n");
+            else if (IfLose()) {
+                printf("What a pity! (=￣ω￣=)\n");
+                printf("your score is %d\n", Max);
             }
         }
     }
-    printf("see ya (｡ŐωŐฺ｡)ﾉﾞ\n");
+    printf("see ya \n");
     return 0;
 }
