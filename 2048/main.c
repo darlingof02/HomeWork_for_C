@@ -61,7 +61,7 @@ int testUp()
     int flag = 0;
     for (j = 1; j <= 4; ++j) {
         for (i = 4; i >= 2; --i) {
-            if (IfValid(Table[i][j] + Table[i-1][j]))
+            if (Table[i][j] && IfValid(Table[i][j] + Table[i-1][j]))
             {
                 flag = 1;
                 break;
@@ -77,7 +77,7 @@ int testDown()
     int flag = 0;
     for (j = 1; j <= 4; ++j) {
         for (i = 1; i <= 3; ++i) {
-            if (IfValid(Table[i+1][j+1] + Table[i][j]))
+            if (Table[i][j] && IfValid(Table[i+1][j] + Table[i][j]))
             {
                 flag = 1;
                 break;
@@ -93,7 +93,7 @@ int testLeft()
     int flag = 0;
     for (i = 1; i <= 4; ++i) {
         for (j = 4; j >= 2; --j) {
-            if (IfValid(Table[i][j-1] + Table[i][j]))
+            if (Table[i][j] && IfValid(Table[i][j-1] + Table[i][j]))
             {
                 flag = 1;
                 break;
@@ -109,7 +109,7 @@ int testRight()
     int flag = 0;
     for (i = 1; i <= 4; ++i) {
         for (j = 1; j <= 3; ++j) {
-            if (IfValid(Table[i][j+1] + Table[i][j]))
+            if (Table[i][j] && IfValid(Table[i][j+1] + Table[i][j]))
             {
                 flag = 1;
                 break;
@@ -174,8 +174,8 @@ void upMove()
                 }
             }
         }
+        addNew();
     }
-    addNew();
 }
 
 
@@ -292,7 +292,7 @@ char GetDir()
 }
 
 int main() {
-    printf("Do you wanna play (≧?≦)\n");
+    printf("Do you wanna play (≧v≦)\n");
     printf("Y/N\n");
     char c;
     Max = 0;
@@ -339,13 +339,13 @@ int main() {
                 ShowTable();
                 printf("Uh, you push something wrong (òωó?)\n");
             }
-            if (IfWin()) printf("Congratulations! \n");
+            if (IfWin()) printf("Congratulations! （o^~^o)\n");
             else if (IfLose()) {
-                printf("What a pity! (=￣ω￣=)\n");
+                printf("What a pity! (>…<。)~~\n");
                 printf("your score is %d\n", Max);
             }
         }
     }
-    printf("see ya \n");
+    printf("see ya (=￣ω￣=)\n");
     return 0;
 }
